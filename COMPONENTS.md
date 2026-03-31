@@ -31,7 +31,6 @@ src/
 ### 1. **Sidebar** (`Sidebar.tsx`)
 - Navegación principal con items (Dashboard, Transactions, Analytics, Reports, Settings)
 - Estado activo de navegación
-- Botón "New Project" 
 - Props: `activeItem`, `onNavClick`
 
 ### 2. **Header** (`Header.tsx`)

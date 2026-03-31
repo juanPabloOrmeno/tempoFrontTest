@@ -25,7 +25,6 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
           <tr>
             <th>DATE</th>
             <th>MERCHANT</th>
-            <th>CATEGORY</th>
             <th>AMOUNT</th>
             <th>STATUS</th>
             <th>ACTIONS</th>
@@ -33,7 +32,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
         </thead>
         <tbody>
           {transactions.map((transaction) => (
-            <TransactionRow key={transaction.id} transaction={transaction} />
+            <TransactionRow key={transaction.transactionId} transaction={transaction} />
           ))}
         </tbody>
       </table>

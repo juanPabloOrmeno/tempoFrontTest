@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { Transaction, FilterState } from '../types/transaction';
+import { transactionRepository } from '../api/transactionRepository';
 
 interface TransactionState {
   // Estado
@@ -8,6 +9,8 @@ interface TransactionState {
   filters: FilterState;
   totalEntries: number;
   totalPages: number;
+  loading: boolean;
+  error: string | null;
 
   // Acciones
   setTransactions: (transactions: Transaction[]) => void;
@@ -18,6 +21,12 @@ interface TransactionState {
   setTotalPages: (pages: number) => void;
   applyFilters: () => void;
   resetFilters: () => void;
+  
+  // Acciones asincrónicas
+  fetchTransactions: () => Promise<void>;
+  addTransaction: (transaction: Transaction) => void;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
 }
 
 const initialFilters: FilterState = {
@@ -28,54 +37,15 @@ const initialFilters: FilterState = {
 
 export const useTransactionStore = create<TransactionState>((set, get) => ({
   // Estado inicial
-  transactions: [
-    {
-      id: '1',
-      date: 'Oct 24, 2023',
-      time: '14:32 PM',
-      merchant: 'Structura Blueprints Ltd.',
-      merchantInvoice: 'Inv #88219',
-      category: 'MATERIALS',
-      amount: 1245.6,
-      status: 'Success',
-    },
-    {
-      id: '2',
-      date: 'Oct 22, 2023',
-      time: '09:15 AM',
-      merchant: 'RenderCloud Pro',
-      merchantInvoice: 'SaaS Subscription',
-      category: 'SOFTWARE',
-      amount: 299.0,
-      status: 'Pending',
-    },
-    {
-      id: '3',
-      date: 'Oct 21, 2023',
-      time: '16:45 PM',
-      merchant: 'Logistics Hub',
-      merchantInvoice: 'Shipping Fee',
-      category: 'OPERATIONS',
-      amount: 84.2,
-      status: 'Success',
-    },
-    {
-      id: '4',
-      date: 'Oct 20, 2023',
-      time: '11:02 AM',
-      merchant: 'Global Surveys Inc.',
-      merchantInvoice: 'Error Processing',
-      category: 'FEES',
-      amount: 2500.0,
-      status: 'Failed',
-    },
-  ],
+  transactions: [],
   currentPage: 1,
   filters: initialFilters,
-  totalEntries: 482,
-  totalPages: 48,
+  totalEntries: 0,
+  totalPages: 0,
+  loading: false,
+  error: null,
 
-  // Acciones
+  // Acciones síncronas
   setTransactions: (transactions) => set({ transactions }),
 
   setCurrentPage: (page) => set({ currentPage: page }),
@@ -92,9 +62,7 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
   setTotalPages: (pages) => set({ totalPages: pages }),
 
   applyFilters: () => {
-    // Resetear a página 1 al aplicar filtros
     set({ currentPage: 1 });
-    // Aquí iría la lógica para aplicar filtros a las transacciones
     const state = get();
     console.log('Filtros aplicados:', state.filters);
   },
@@ -104,4 +72,34 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
       filters: initialFilters,
       currentPage: 1,
     }),
+
+  setLoading: (loading) => set({ loading }),
+
+  setError: (error) => set({ error }),
+
+  // Cargar transacciones del backend
+  fetchTransactions: async () => {
+    set({ loading: true, error: null });
+    try {
+      const data = await transactionRepository.getAllTransactions();
+      set({
+        transactions: data,
+        totalEntries: data.length,
+        totalPages: Math.ceil(data.length / 10),
+        loading: false,
+      });
+    } catch (error: any) {
+      set({
+        error: error.message || 'Error al cargar transacciones',
+        loading: false,
+      });
+    }
+  },
+
+  // Agregar transacción a la lista local
+  addTransaction: (transaction) =>
+    set((state) => ({
+      transactions: [transaction, ...state.transactions],
+      totalEntries: state.totalEntries + 1,
+    })),
 }));

@@ -208,21 +208,6 @@
     flex-basis: 100%;
   }
 
-  .cell-category {
-    grid-column: 1 / 2;
-    padding: 0;
-  }
-
-  .cell-category::before {
-    content: 'Category';
-    font-weight: 600;
-    color: #495057;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    margin-bottom: 2px;
-  }
-
   .cell-amount {
     grid-column: 2 / 3;
     padding: 0;
@@ -318,14 +303,12 @@
 
   .cell-date::before,
   .cell-merchant::before,
-  .cell-category::before,
   .cell-amount::before,
   .cell-status::before {
     font-size: 10px;
   }
 
   .cell-merchant,
-  .cell-category,
   .cell-amount,
   .cell-status,
   .cell-actions {

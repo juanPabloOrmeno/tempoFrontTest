@@ -7,47 +7,30 @@ interface TransactionRowProps {
 }
 
 const TransactionRow: React.FC<TransactionRowProps> = ({ transaction }) => {
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'Success':
-        return 'status-success';
-      case 'Pending':
-        return 'status-pending';
-      case 'Failed':
-        return 'status-failed';
-      default:
-        return '';
-    }
-  };
-
-  const getCategoryColor = (category: string) => {
-    const colors: { [key: string]: string } = {
-      MATERIALS: 'category-materials',
-      SOFTWARE: 'category-software',
-      OPERATIONS: 'category-operations',
-      FEES: 'category-fees',
+  // Formatear la fecha ISO a formato legible
+  const formatDate = (isoDate: string): { date: string; time: string } => {
+    const date = new Date(isoDate);
+    return {
+      date: date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      }),
+      time: date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      }),
     };
-    return colors[category] || 'category-default';
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'Success':
-        return '✓';
-      case 'Pending':
-        return '⊙';
-      case 'Failed':
-        return '⚠';
-      default:
-        return '';
-    }
-  };
+  const { date, time } = formatDate(transaction.transactionDate);
 
   return (
     <tr className="transaction-row">
       <td className="cell-date" data-label="Date">
-        <div>{transaction.date}</div>
-        <div className="cell-time">{transaction.time}</div>
+        <div>{date}</div>
+        <div className="cell-time">{time}</div>
       </td>
       <td className="cell-merchant" data-label="Merchant">
         <div className="merchant-avatar">
@@ -55,23 +38,16 @@ const TransactionRow: React.FC<TransactionRowProps> = ({ transaction }) => {
         </div>
         <div className="merchant-info">
           <div className="merchant-name">{transaction.merchant}</div>
-          {transaction.merchantInvoice && (
-            <div className="merchant-invoice">{transaction.merchantInvoice}</div>
-          )}
+          <div className="merchant-invoice">{transaction.tenpistaName}</div>
         </div>
       </td>
-      <td className="cell-category" data-label="Category">
-        <span className={`category-badge ${getCategoryColor(transaction.category)}`}>
-          {transaction.category}
-        </span>
-      </td>
       <td className="cell-amount" data-label="Amount">
-        ${transaction.amount.toFixed(2)}
+        ${transaction.amount.toLocaleString('en-US')}
       </td>
       <td className="cell-status" data-label="Status">
-        <span className={`status-badge ${getStatusColor(transaction.status)}`}>
-          <span className="status-icon">{getStatusIcon(transaction.status)}</span>
-          {transaction.status}
+        <span className="status-badge status-success">
+          <span className="status-icon">✓</span>
+          Completed
         </span>
       </td>
       <td className="cell-actions" data-label="Actions">

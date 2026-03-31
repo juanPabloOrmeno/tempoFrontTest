@@ -1,45 +1,74 @@
-import React, { useState } from 'react';
-import type { Transaction } from '../types/transaction';
+import React, { useState, useEffect } from 'react';
+import type { TransactionRequest } from '../types/api';
+import type { TenpistaResponse } from '../types/api';
+import { transactionRepository } from '../api/transactionRepository';
+import { tenpistaRepository } from '../api/tenpistaRepository';
 import '../styles/TransactionForm.css';
 
 interface TransactionFormProps {
-    onSubmit?: (transaction: Omit<Transaction, 'id'>) => void;
+    onSubmit?: (transaction: TransactionRequest) => void | Promise<void>;
     onCancel?: () => void;
 }
 
 interface FormErrors {
-    merchantName?: string;
-    category?: string;
+    transactionId?: string;
+    merchant?: string;
     amount?: string;
     transactionDate?: string;
+    tenpistaId?: string;
 }
 
 const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel }) => {
     const [formData, setFormData] = useState({
-        merchantName: '',
-        category: '',
+        transactionId: '',
+        merchant: '',
         amount: '',
         transactionDate: '',
-        notes: '',
+        tenpistaId: '',
     });
 
     const [errors, setErrors] = useState<FormErrors>({});
     const [isSaved, setIsSaved] = useState(false);
+    const [tenpistas, setTenpistas] = useState<TenpistaResponse[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Cargar tenpistas al montar el componente
+    useEffect(() => {
+        const loadTenpistas = async () => {
+            try {
+                setLoading(true);
+                const data = await tenpistaRepository.getAllTenpistas();
+                setTenpistas(data);
+            } catch (error) {
+                console.error('Error cargando tenpistas:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadTenpistas();
+    }, []);
 
     const validateForm = (): boolean => {
         const newErrors: FormErrors = {};
 
-        if (!formData.merchantName.trim()) {
-            newErrors.merchantName = 'Merchant name is required';
+        if (!formData.transactionId.trim()) {
+            newErrors.transactionId = 'Transaction ID is required';
+        } else if (isNaN(Number(formData.transactionId))) {
+            newErrors.transactionId = 'Transaction ID must be a number';
+        } else if (Number(formData.transactionId) <= 0) {
+            newErrors.transactionId = 'Transaction ID must be greater than 0';
         }
 
-        if (!formData.category) {
-            newErrors.category = 'Category is required';
+        if (!formData.merchant.trim()) {
+            newErrors.merchant = 'Merchant name is required';
         }
 
         if (!formData.amount) {
             newErrors.amount = 'Amount is required';
-        } else if (parseFloat(formData.amount) <= 0) {
+        } else if (isNaN(Number(formData.amount))) {
+            newErrors.amount = 'Amount must be a number';
+        } else if (Number(formData.amount) <= 0) {
             newErrors.amount = 'Amount must be greater than 0';
         }
 
@@ -54,6 +83,12 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel })
             }
         }
 
+        if (!formData.tenpistaId) {
+            newErrors.tenpistaId = 'Tenpista is required';
+        } else if (isNaN(Number(formData.tenpistaId))) {
+            newErrors.tenpistaId = 'Invalid tenpista';
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -66,7 +101,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel })
             ...prev,
             [name]: value,
         }));
-        // Clear error for this field when user starts typing
+        // Limpiar error cuando el usuario empieza a escribir
         if (errors[name as keyof FormErrors]) {
             setErrors((prev) => ({
                 ...prev,
@@ -75,94 +110,94 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel })
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!validateForm()) {
             return;
         }
 
-        const transaction: Omit<Transaction, 'id'> = {
-            date: new Date(formData.transactionDate).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-            }),
-            time: new Date().toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true,
-            }),
-            merchant: formData.merchantName,
-            category: formData.category,
-            amount: parseFloat(formData.amount),
-            status: 'Pending',
-        };
+        setIsSubmitting(true);
 
-        onSubmit?.(transaction);
-        setIsSaved(true);
+        try {
+            const transactionRequest: TransactionRequest = {
+                transactionId: Number(formData.transactionId),
+                merchant: formData.merchant,
+                amount: Number(formData.amount),
+                tenpistaId: Number(formData.tenpistaId),
+                transactionDate: new Date(formData.transactionDate).toISOString(),
+            };
 
-        // Reset form after a short delay
-        setTimeout(() => {
-            setFormData({
-                merchantName: '',
-                category: '',
-                amount: '',
-                transactionDate: '',
-                notes: '',
+            await onSubmit?.(transactionRequest);
+            setIsSaved(true);
+
+            // Reset form después de un delay
+            setTimeout(() => {
+                setFormData({
+                    transactionId: '',
+                    merchant: '',
+                    amount: '',
+                    transactionDate: '',
+                    tenpistaId: '',
+                });
+                setIsSaved(false);
+            }, 1500);
+        } catch (error) {
+            console.error('Error enviando transacción:', error);
+            setErrors({
+                merchant: 'Error al enviar la transacción. Intenta de nuevo.',
             });
-            setIsSaved(false);
-        }, 1500);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
         <form className="transaction-form" onSubmit={handleSubmit}>
             <div className="form-row">
                 <div className="form-group">
-                    <label htmlFor="merchantName" className="form-label">
-                        Merchant Name <span className="required">*</span>
+                    <label htmlFor="transactionId" className="form-label">
+                        Transaction ID <span className="required">*</span>
                     </label>
                     <div className="input-wrapper">
                         <input
-                            type="text"
-                            id="merchantName"
-                            name="merchantName"
-                            className={`form-input ${errors.merchantName ? 'error' : ''}`}
-                            placeholder="e.g. Skyline Materials"
-                            value={formData.merchantName}
+                            type="number"
+                            id="transactionId"
+                            name="transactionId"
+                            className={`form-input ${errors.transactionId ? 'error' : ''}`}
+                            placeholder="e.g. 1001"
+                            value={formData.transactionId}
                             onChange={handleInputChange}
                         />
-                        {formData.merchantName && (
+                        {formData.transactionId && !errors.transactionId && (
                             <span className="input-indicator">✓</span>
                         )}
                     </div>
-                    {!errors.merchantName && (
-                        <p className="form-hint">Full legal business name for the vendor.</p>
-                    )}
-                    {errors.merchantName && (
-                        <p className="form-error">{errors.merchantName}</p>
+                    {errors.transactionId && (
+                        <p className="form-error">{errors.transactionId}</p>
                     )}
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="category" className="form-label">
-                        Category <span className="required">*</span>
+                    <label htmlFor="merchant" className="form-label">
+                        Merchant <span className="required">*</span>
                     </label>
-                    <select
-                        id="category"
-                        name="category"
-                        className={`form-select ${errors.category ? 'error' : ''}`}
-                        value={formData.category}
-                        onChange={handleInputChange}
-                    >
-                        <option value="">Select Category</option>
-                        <option value="MATERIALS">Materials</option>
-                        <option value="SOFTWARE">Software</option>
-                        <option value="OPERATIONS">Operations</option>
-                        <option value="FEES">Fees</option>
-                    </select>
-                    {errors.category && (
-                        <p className="form-error">{errors.category}</p>
+                    <div className="input-wrapper">
+                        <input
+                            type="text"
+                            id="merchant"
+                            name="merchant"
+                            className={`form-input ${errors.merchant ? 'error' : ''}`}
+                            placeholder="e.g. Skyline Materials"
+                            value={formData.merchant}
+                            onChange={handleInputChange}
+                        />
+                        {formData.merchant && !errors.merchant && (
+                            <span className="input-indicator">✓</span>
+                        )}
+                    </div>
+                    {errors.merchant && (
+                        <p className="form-error">{errors.merchant}</p>
                     )}
                 </div>
             </div>
@@ -177,8 +212,8 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel })
                         id="amount"
                         name="amount"
                         className={`form-input ${errors.amount ? 'error' : ''}`}
-                        placeholder="0.00"
-                        step="0.01"
+                        placeholder="0"
+                        step="1"
                         value={formData.amount}
                         onChange={handleInputChange}
                     />
@@ -206,24 +241,35 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel })
             </div>
 
             <div className="form-group full-width">
-                <label htmlFor="notes" className="form-label">
-                    Additional Notes
+                <label htmlFor="tenpistaId" className="form-label">
+                    Tenpista <span className="required">*</span>
                 </label>
-                <textarea
-                    id="notes"
-                    name="notes"
-                    className="form-textarea"
-                    placeholder="Optional context or project references..."
-                    value={formData.notes}
+                <select
+                    id="tenpistaId"
+                    name="tenpistaId"
+                    className={`form-select ${errors.tenpistaId ? 'error' : ''}`}
+                    value={formData.tenpistaId}
                     onChange={handleInputChange}
-                    rows={6}
-                />
+                    disabled={loading}
+                >
+                    <option value="">
+                        {loading ? 'Loading tenpistas...' : 'Select a Tenpista'}
+                    </option>
+                    {tenpistas.map((tenpista) => (
+                        <option key={tenpista.id} value={tenpista.id}>
+                            {tenpista.name}
+                        </option>
+                    ))}
+                </select>
+                {errors.tenpistaId && (
+                    <p className="form-error">{errors.tenpistaId}</p>
+                )}
             </div>
 
             <div className="form-footer">
                 <div className="form-status">
                     {isSaved && (
-                        <p className="status-message">✓ DRAFT SAVED LOCALLY</p>
+                        <p className="status-message">✓ TRANSACTION CREATED SUCCESSFULLY</p>
                     )}
                 </div>
                 <div className="form-actions">
@@ -231,15 +277,16 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel })
                         type="button"
                         className="btn btn-cancel"
                         onClick={onCancel}
+                        disabled={isSubmitting}
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         className="btn btn-primary"
-                        disabled={isSaved}
+                        disabled={isSaved || isSubmitting}
                     >
-                        {isSaved ? 'Saving...' : 'Save Transaction'}
+                        {isSubmitting ? 'Submitting...' : 'Create Transaction'}
                     </button>
                 </div>
             </div>

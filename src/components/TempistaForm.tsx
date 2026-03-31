@@ -1,52 +1,30 @@
 import React, { useState } from 'react';
+import type { TenpistaRequest } from '../types/api';
 import '../styles/TempistaForm.css';
 
 interface TempistaFormProps {
-  onSubmit?: (tempista: TempistaFormData) => void;
+  onSubmit?: (tenpista: TenpistaRequest) => void | Promise<void>;
   onCancel?: () => void;
-}
-
-export interface TempistaFormData {
-  name: string;
-  email: string;
-  phone: string;
-  specialty: string;
-  bio: string;
 }
 
 interface FormErrors {
   name?: string;
-  email?: string;
-  specialty?: string;
 }
 
 const TempistaForm: React.FC<TempistaFormProps> = ({ onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState<TempistaFormData>({
+  const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    phone: '',
-    specialty: '',
-    bio: '',
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSaved, setIsSaved] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
-    }
-
-    if (!formData.specialty) {
-      newErrors.specialty = 'Specialty is required';
     }
 
     setErrors(newErrors);
@@ -61,7 +39,6 @@ const TempistaForm: React.FC<TempistaFormProps> = ({ onSubmit, onCancel }) => {
       ...prev,
       [name]: value,
     }));
-    // Clear error for this field when user starts typing
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({
         ...prev,
@@ -70,138 +47,66 @@ const TempistaForm: React.FC<TempistaFormProps> = ({ onSubmit, onCancel }) => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) {
       return;
     }
 
-    onSubmit?.(formData);
-    setIsSaved(true);
+    setIsSubmitting(true);
 
-    // Reset form after a short delay
-    setTimeout(() => {
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        specialty: '',
-        bio: '',
-      });
-      setIsSaved(false);
-    }, 1500);
+    try {
+      const tenpistaRequest: TenpistaRequest = {
+        name: formData.name,
+      };
+
+      await onSubmit?.(tenpistaRequest);
+      setIsSaved(true);
+
+      setTimeout(() => {
+        setFormData({ name: '' });
+        setIsSaved(false);
+      }, 1500);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <form className="tempista-form" onSubmit={handleSubmit}>
-      <div className="form-row">
-        <div className="form-group">
-          <label htmlFor="name" className="form-label">
-            Full Name <span className="required">*</span>
-          </label>
-          <div className="input-wrapper">
-            <input
-              type="text"
-              id="name"
-              name="name"
-              className={`form-input ${errors.name ? 'error' : ''}`}
-              placeholder="e.g. John Smith"
-              value={formData.name}
-              onChange={handleInputChange}
-            />
-            {formData.name && <span className="input-indicator">✓</span>}
-          </div>
-          {errors.name && (
-            <p className="form-error">{errors.name}</p>
-          )}
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="email" className="form-label">
-            Email <span className="required">*</span>
-          </label>
-          <div className="input-wrapper">
-            <input
-              type="email"
-              id="email"
-              name="email"
-              className={`form-input ${errors.email ? 'error' : ''}`}
-              placeholder="john@example.com"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-            {formData.email && !errors.email && (
-              <span className="input-indicator">✓</span>
-            )}
-          </div>
-          {errors.email && (
-            <p className="form-error">{errors.email}</p>
-          )}
-        </div>
-      </div>
-
-      <div className="form-row">
-        <div className="form-group">
-          <label htmlFor="phone" className="form-label">
-            Phone Number
-          </label>
+      <div className="form-group full-width">
+        <label htmlFor="name" className="form-label">
+          Tenpista Name <span className="required">*</span>
+        </label>
+        <div className="input-wrapper">
           <input
-            type="tel"
-            id="phone"
-            name="phone"
-            className="form-input"
-            placeholder="+1 (555) 000-0000"
-            value={formData.phone}
+            type="text"
+            id="name"
+            name="name"
+            className={`form-input ${errors.name ? 'error' : ''}`}
+            placeholder="e.g. Juan Pérez"
+            value={formData.name}
             onChange={handleInputChange}
           />
-          <p className="form-hint">Optional contact number</p>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="specialty" className="form-label">
-            Specialty <span className="required">*</span>
-          </label>
-          <select
-            id="specialty"
-            name="specialty"
-            className={`form-select ${errors.specialty ? 'error' : ''}`}
-            value={formData.specialty}
-            onChange={handleInputChange}
-          >
-            <option value="">Select Specialty</option>
-            <option value="architect">Architect</option>
-            <option value="structural">Structural Engineer</option>
-            <option value="mechanical">Mechanical Engineer</option>
-            <option value="electrical">Electrical Engineer</option>
-            <option value="designer">Interior Designer</option>
-            <option value="project-manager">Project Manager</option>
-          </select>
-          {errors.specialty && (
-            <p className="form-error">{errors.specialty}</p>
+          {formData.name && !errors.name && (
+            <span className="input-indicator">✓</span>
           )}
         </div>
-      </div>
-
-      <div className="form-group full-width">
-        <label htmlFor="bio" className="form-label">
-          Biography / Description
-        </label>
-        <textarea
-          id="bio"
-          name="bio"
-          className="form-textarea"
-          placeholder="Tell us about your experience, skills, and expertise..."
-          value={formData.bio}
-          onChange={handleInputChange}
-          rows={6}
-        />
+        {!errors.name && (
+          <p className="form-hint">Full legal name of the team member.</p>
+        )}
+        {errors.name && (
+          <p className="form-error">{errors.name}</p>
+        )}
       </div>
 
       <div className="form-footer">
         <div className="form-status">
           {isSaved && (
-            <p className="status-message">✓ DRAFT SAVED LOCALLY</p>
+            <p className="status-message">✓ TENPISTA CREATED SUCCESSFULLY</p>
           )}
         </div>
         <div className="form-actions">
@@ -209,15 +114,16 @@ const TempistaForm: React.FC<TempistaFormProps> = ({ onSubmit, onCancel }) => {
             type="button"
             className="btn btn-cancel"
             onClick={onCancel}
+            disabled={isSubmitting}
           >
             Cancel
           </button>
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={isSaved}
+            disabled={isSaved || isSubmitting}
           >
-            {isSaved ? 'Saving...' : 'Save Tenpista'}
+            {isSubmitting ? 'Creating...' : 'Create Tenpista'}
           </button>
         </div>
       </div>

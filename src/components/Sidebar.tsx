@@ -44,10 +44,6 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem = 'transactions', onNavCli
           </button>
         ))}
       </nav>
-
-      <button className="new-project-btn">
-        + New Project
-      </button>
     </aside>
   );
 };

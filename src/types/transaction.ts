@@ -1,12 +1,14 @@
+/**
+ * Tipos del frontend adaptados para trabajar con la API
+ */
+
 export interface Transaction {
-  id: string;
-  date: string;
-  time: string;
-  merchant: string;
-  merchantInvoice?: string;
-  category: string;
+  transactionId: number;
   amount: number;
-  status: 'Success' | 'Pending' | 'Failed';
+  merchant: string;
+  tenpistaName: string;
+  transactionDate: string; // ISO format
+  createdAt: string; // ISO format
 }
 
 export interface FilterState {
