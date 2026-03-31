@@ -7,7 +7,7 @@ export interface TransactionRequest {
   transactionId: number;
   amount: number;
   merchant: string;
-  tenpistaId: number;
+  tempistaId: number;
   transactionDate: string; // ISO format: "2026-03-28T15:30:00"
 }
 
@@ -15,16 +15,16 @@ export interface TransactionResponse {
   transactionId: number;
   amount: number;
   merchant: string;
-  tenpistaName: string;
+  tempistaName: string;
   transactionDate: string; // ISO format
   createdAt: string; // ISO format
 }
 
-export interface TenpistaRequest {
+export interface TempistaRequest {
   name: string;
 }
 
-export interface TenpistaResponse {
+export interface TempistaResponse {
   id: number;
   name: string;
 }

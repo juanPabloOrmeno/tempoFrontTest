@@ -1,5 +1,7 @@
 import React from 'react';
 import type { Transaction } from '../types/transaction';
+import { useTransactionStore } from '../store/transactionStore';
+import { transactionRepository } from '../api/tramsactionRepository';
 import '../styles/TransactionRow.css';
 
 interface TransactionRowProps {
@@ -7,6 +9,9 @@ interface TransactionRowProps {
 }
 
 const TransactionRow: React.FC<TransactionRowProps> = ({ transaction }) => {
+  const removeTransaction = useTransactionStore((state) => state.removeTransaction);
+  const setError = useTransactionStore((state) => state.setError);
+
   // Formatear la fecha ISO a formato legible
   const formatDate = (isoDate: string): { date: string; time: string } => {
     const date = new Date(isoDate);
@@ -24,6 +29,25 @@ const TransactionRow: React.FC<TransactionRowProps> = ({ transaction }) => {
     };
   };
 
+  const handleDelete = async () => {
+    if (
+      !window.confirm(
+        `¿Estás seguro de que deseas eliminar la transacción de ${transaction.merchant}?`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await transactionRepository.deleteTransaction(transaction.transactionId);
+      removeTransaction(transaction.transactionId);
+    } catch (error: any) {
+      setError(
+        error.message || 'Error al eliminar la transacción'
+      );
+    }
+  };
+
   const { date, time } = formatDate(transaction.transactionDate);
 
   return (
@@ -38,7 +62,7 @@ const TransactionRow: React.FC<TransactionRowProps> = ({ transaction }) => {
         </div>
         <div className="merchant-info">
           <div className="merchant-name">{transaction.merchant}</div>
-          <div className="merchant-invoice">{transaction.tenpistaName}</div>
+          <div className="merchant-invoice">{transaction.tempistaName}</div>
         </div>
       </td>
       <td className="cell-amount" data-label="Amount">
@@ -51,8 +75,12 @@ const TransactionRow: React.FC<TransactionRowProps> = ({ transaction }) => {
         </span>
       </td>
       <td className="cell-actions" data-label="Actions">
-        <button className="action-btn" title="More actions">
-          ⋮
+        <button
+          className="action-btn"
+          title="Eliminar transacción"
+          onClick={handleDelete}
+        >
+          🗑️
         </button>
       </td>
     </tr>

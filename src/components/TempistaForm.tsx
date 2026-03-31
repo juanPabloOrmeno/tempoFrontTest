@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import type { TenpistaRequest } from '../types/api';
+import type { TempistaRequest } from '../types/api';
 import '../styles/TempistaForm.css';
 
 interface TempistaFormProps {
-  onSubmit?: (tenpista: TenpistaRequest) => void | Promise<void>;
+  onSubmit?: (tempista: TempistaRequest) => void | Promise<void>;
   onCancel?: () => void;
 }
 
@@ -57,11 +57,11 @@ const TempistaForm: React.FC<TempistaFormProps> = ({ onSubmit, onCancel }) => {
     setIsSubmitting(true);
 
     try {
-      const tenpistaRequest: TenpistaRequest = {
+      const tempistaRequest: TempistaRequest = {
         name: formData.name,
       };
 
-      await onSubmit?.(tenpistaRequest);
+      await onSubmit?.(tempistaRequest);
       setIsSaved(true);
 
       setTimeout(() => {
@@ -79,7 +79,7 @@ const TempistaForm: React.FC<TempistaFormProps> = ({ onSubmit, onCancel }) => {
     <form className="tempista-form" onSubmit={handleSubmit}>
       <div className="form-group full-width">
         <label htmlFor="name" className="form-label">
-          Tenpista Name <span className="required">*</span>
+          Tempista Name <span className="required">*</span>
         </label>
         <div className="input-wrapper">
           <input
@@ -106,7 +106,7 @@ const TempistaForm: React.FC<TempistaFormProps> = ({ onSubmit, onCancel }) => {
       <div className="form-footer">
         <div className="form-status">
           {isSaved && (
-            <p className="status-message">✓ TENPISTA CREATED SUCCESSFULLY</p>
+            <p className="status-message">✓ TEMPISTA CREATED SUCCESSFULLY</p>
           )}
         </div>
         <div className="form-actions">
@@ -123,7 +123,7 @@ const TempistaForm: React.FC<TempistaFormProps> = ({ onSubmit, onCancel }) => {
             className="btn btn-primary"
             disabled={isSaved || isSubmitting}
           >
-            {isSubmitting ? 'Creating...' : 'Create Tenpista'}
+            {isSubmitting ? 'Creating...' : 'Create Tempista'}
           </button>
         </div>
       </div>

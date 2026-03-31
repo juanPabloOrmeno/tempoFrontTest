@@ -20,12 +20,6 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ onFilterChange, onApplyFilter
     onFilterChange?.(newFilters);
   };
 
-  const handleDateRangeChange = (e: React.ChangeEvent<HTMLButtonElement>) => {
-    const newFilters = { ...filters, dateRange: e.currentTarget.textContent || 'Last 30 Days' };
-    setFilters(newFilters);
-    onFilterChange?.(newFilters);
-  };
-
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newFilters = { ...filters, status: e.target.value };
     setFilters(newFilters);

@@ -4,7 +4,7 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import TransactionForm from '../components/TransactionForm';
 import { useTransactionStore } from '../store/transactionStore';
-import { transactionRepository } from '../api/transactionRepository';
+import { transactionRepository } from '../api/tramsactionRepository';
 import type { TransactionRequest } from '../types/api';
 
 interface AddTransactionPageProps {

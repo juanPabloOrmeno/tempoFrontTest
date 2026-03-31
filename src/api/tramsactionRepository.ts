@@ -61,4 +61,19 @@ export const transactionRepository = {
       };
     }
   },
+
+  /**
+   * Eliminar transacción por ID
+   * DELETE /transaction/:transactionId
+   */
+  deleteTransaction: async (transactionId: number): Promise<void> => {
+    try {
+      await axiosClient.delete(`/transaction/${transactionId}`);
+    } catch (error: any) {
+      throw {
+        message: error.response?.data?.message || `Error al eliminar transacción ${transactionId}`,
+        status: error.response?.status,
+      };
+    }
+  },
 };

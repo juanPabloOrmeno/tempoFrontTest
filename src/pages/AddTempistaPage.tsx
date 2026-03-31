@@ -3,8 +3,8 @@ import '../styles/AddTempistaPage.css';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import TempistaForm from '../components/TempistaForm';
-import { tenpistaRepository } from '../api/tenpistaRepository';
-import type { TenpistaRequest } from '../types/api';
+import { tempistaRepository } from '../api/tempistaRepository';
+import type { TempistaRequest } from '../types/api';
 
 interface AddTempistaPageProps {
   onNavigate?: (page: string) => void;
@@ -13,40 +13,40 @@ interface AddTempistaPageProps {
 const AddTempistaPage: React.FC<AddTempistaPageProps> = ({ onNavigate }) => {
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const handleSubmit = async (tenpistaData: TenpistaRequest) => {
+  const handleSubmit = async (tempistaData: TempistaRequest) => {
     try {
       setSubmitError(null);
-      const response = await tenpistaRepository.createTenpista(tenpistaData);
-      console.log('Tenpista creado exitosamente:', response);
+      const response = await tempistaRepository.createTempista(tempistaData);
+      console.log('Tempista creado exitosamente:', response);
       
       // Redirigir después de 1.5 segundos
       setTimeout(() => {
-        onNavigate?.('tenpistas');
+        onNavigate?.('tempistas');
       }, 1500);
     } catch (error: any) {
-      const errorMessage = error.message || 'Error al crear el tenpista';
+      const errorMessage = error.message || 'Error al crear el tempista';
       setSubmitError(errorMessage);
-      console.error('Error al crear tenpista:', error);
+      console.error('Error al crear tempista:', error);
     }
   };
 
   const handleCancel = () => {
-    onNavigate?.('tenpistas');
+    onNavigate?.('tempistas');
   };
 
   return (
     <div className="add-tempista-page">
-      <Sidebar activeItem="tenpistas" onNavClick={onNavigate} />
+      <Sidebar activeItem="tempistas" onNavClick={onNavigate} />
 
       <main className="main-content">
         <Header
-          title="Add New Tenpista"
+          title="Add New Tempista"
           description="Register a new team member to your architectural project workspace."
         />
 
         <div className="page-content">
           <div className="breadcrumb">
-            <span className="breadcrumb-link">Tenpistas</span>
+            <span className="breadcrumb-link">Tempistas</span>
             <span className="breadcrumb-separator">›</span>
             <span className="breadcrumb-active">Add Member</span>
           </div>

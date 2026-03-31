@@ -2,10 +2,8 @@ import React, { useEffect } from 'react';
 import '../styles/TransactionsPage.css';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
-import FilterPanel from '../components/FilterPanel';
 import TransactionTable from '../components/TransactionTable';
 import { useTransactionStore } from '../store/transactionStore';
-import type { FilterState } from '../types/transaction';
 
 interface TransactionsPageProps {
   onNavigate?: (page: string) => void;
@@ -15,13 +13,10 @@ const TransactionsPage: React.FC<TransactionsPageProps> = ({ onNavigate }) => {
   const {
     transactions,
     currentPage,
-    filters,
     totalPages,
     loading,
     error,
-    updateFilters,
     setCurrentPage,
-    applyFilters,
     fetchTransactions,
   } = useTransactionStore();
 
@@ -29,14 +24,6 @@ const TransactionsPage: React.FC<TransactionsPageProps> = ({ onNavigate }) => {
   useEffect(() => {
     fetchTransactions();
   }, []);
-
-  const handleFilterChange = (newFilters: FilterState) => {
-    updateFilters(newFilters);
-  };
-
-  const handleApplyFilters = () => {
-    applyFilters();
-  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -57,11 +44,6 @@ const TransactionsPage: React.FC<TransactionsPageProps> = ({ onNavigate }) => {
         />
 
         <div className="page-content">
-          <FilterPanel
-            onFilterChange={handleFilterChange}
-            onApplyFilters={handleApplyFilters}
-          />
-
           {error && (
             <div className="error-message" style={{ padding: '16px', background: '#f8d7da', color: '#721c24', borderRadius: '4px', marginBottom: '16px' }}>
               Error al cargar transacciones: {error}

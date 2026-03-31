@@ -6,7 +6,7 @@ export interface Transaction {
   transactionId: number;
   amount: number;
   merchant: string;
-  tenpistaName: string;
+  tempistaName: string;
   transactionDate: string; // ISO format
   createdAt: string; // ISO format
 }

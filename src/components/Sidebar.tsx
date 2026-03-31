@@ -16,7 +16,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem = 'transactions', onNavCli
   const [active, setActive] = useState(activeItem);
 
   const navItems: NavItem[] = [
-    { id: 'tenpistas', label: 'Tenpistas', icon: '👤' },
+    { id: 'tempistas', label: 'Tempistas', icon: '👤' },
     { id: 'transactions', label: 'Transactions', icon: '💳' },
   ];
 

@@ -1,4 +1,4 @@
-# Nuevas Pantallas - Formularios de Transacciones y Tenpistas
+# Nuevas Pantallas - Formularios de Transacciones y Tempistas
 
 ## 📋 Pantalla "Create New Transaction"
 
@@ -23,7 +23,7 @@
 
 ---
 
-## 👤 Pantalla "Add New Tenpista"
+## 👤 Pantalla "Add New Tempista"
 
 **Archivo:** [AddTempistaPage.tsx](src/pages/AddTempistaPage.tsx)
 
@@ -41,8 +41,8 @@
 - ✓ Mensajes de error específicos
 
 ### Acciones:
-- **Cancel** - Volver a la lista de tenpistas
-- **Save Tenpista** - Guardar y volver a la lista
+- **Cancel** - Volver a la lista de tempistas
+- **Save Tempista** - Guardar y volver a la lista
 
 ---
 
@@ -54,7 +54,7 @@
 - Gestiona validación e estado local
 
 ### TempistaForm.tsx
-- Componente reutilizable para formulario de tenpistas
+- Componente reutilizable para formulario de tempistas
 - Props: `onSubmit`, `onCancel`
 - Gestiona validación e estado local
 
@@ -65,7 +65,7 @@
 La navegación entre páginas se controla desde `App.tsx`:
 - **transactions** → Lista de transacciones
 - **add-transaction** → Crear nueva transacción
-- **add-tempista** → Agregar nuevo tenpista
+- **add-tempista** → Agregar nuevo tempista
 
 ### Cómo navegar:
 1. Desde la lista, haz clic en "New Transaction" o "Transactions" en el sidebar
@@ -99,14 +99,14 @@ El formulario de transacciones integra automáticamente con el store de Zustand:
 - Las nuevas transacciones se agregan al estado global
 - Los datos persisten en la lista
 
-Para el formulario de tenpista:
-- Por implementar: conectar con store de tenpistas cuando se cree
+Para el formulario de tempista:
+- Por implementar: conectar con store de tempistas cuando se cree
 
 ---
 
 ## 📝 Próximos Pasos
 
-1. Crear store de tenpistas en Zustand
+1. Crear store de tempistas en Zustand
 2. Implementar API calls para guardar datos
 3. Agregar validación adicional si es necesaria
 4. Mejorar mensajes de error

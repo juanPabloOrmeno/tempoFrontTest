@@ -17,7 +17,7 @@ src/
 │   └── axiosClient.ts           # Configuración de Axios y base URL
 ├── api/
 │   ├── transactionRepository.ts # Métodos CRUD para transacciones
-│   ├── tenpistaRepository.ts    # Métodos CRUD para tenpistas
+│   ├── tempistaRepository.ts    # Métodos CRUD para tempistas
 │   └── index.ts                  # Exportaciones de repositorios
 ├── types/
 │   ├── transaction.ts           # Tipos del frontend
@@ -37,10 +37,10 @@ src/
 - `POST /transaction` - Crear nueva transacción
 - `GET /transaction/:transactionId` - Obtener transacción por ID
 
-### Tenpistas
-- `GET /tenpistas` - Obtener todos los tenpistas
-- `POST /tenpistas` - Crear nuevo tenpista
-- `GET /tenpistas/:name` - Obtener tenpista por nombre
+### Tempistas
+- `GET /tempistas` - Obtener todos los tempistas
+- `POST /tempistas` - Crear nuevo tempista
+- `GET /tempistas/:name` - Obtener tempista por nombre
 
 ## Configuración
 
@@ -69,13 +69,13 @@ El TempoService debe estar ejecutándose en `http://localhost:8080` (o la URL co
 - Status fijo: 'Pending'
 
 **Ahora:**
-- Campos: transactionId, merchant, amount, transactionDate, tenpistaId
-- Carga lista de tenpistas dinámicamente
+- Campos: transactionId, merchant, amount, transactionDate, tempistaId
+- Carga lista de tempistas dinámicamente
 - Envía `TransactionRequest` al backend
 
 ### TransactionRow & TransactionTable
 - Removida la columna de CATEGORY
-- El campo `tenpistaName` se muestra en lugar de `merchantInvoice`
+- El campo `tempistaName` se muestra en lugar de `merchantInvoice`
 - Status siempre es "Completed" (desde el backend)
 - Formateo dinámico de fechas ISO
 
@@ -110,17 +110,17 @@ const handleCrear = async () => {
     transactionId: 1001,
     merchant: 'Acme Corp',
     amount: 5000,
-    tenpistaId: 1,
+    tempistaId: 1,
     transactionDate: '2026-03-28T10:00:00',
   });
 };
 ```
 
-### Obtener Tenpistas
+### Obtener Tempistas
 ```typescript
-import { tenpistaRepository } from '../api/tenpistaRepository';
+import { tempistaRepository } from '../api/tempistaRepository';
 
-const tenpistas = await tenpistaRepository.getAllTenpistas();
+const tempistas = await tempistaRepository.getAllTempistas();
 ```
 
 ## Manejo de Errores
@@ -146,7 +146,7 @@ Todos los tipos están sincronizados con los DTOs del backend:
   transactionId: number;
   amount: number;
   merchant: string;
-  tenpistaId: number;
+  tempistaId: number;
   transactionDate: string; // ISO format
 }
 ```
@@ -157,7 +157,7 @@ Todos los tipos están sincronizados con los DTOs del backend:
   transactionId: number;
   amount: number;
   merchant: string;
-  tenpistaName: string;
+  tempistaName: string;
   transactionDate: string;
   createdAt: string;
 }
@@ -178,5 +178,5 @@ Todos los tipos están sincronizados con los DTOs del backend:
 - El backend retorna `createdAt` solo en GET, no en POST response detallado
 - El campo `amount` es Integer en el backend (no Float)
 - El `transactionId` debe ser único en el backend
-- El `tenpistaId` debe existir en la base de datos
+- El `tempistaId` debe existir en la base de datos
 - Las fechas deben enviarse en formato ISO 8601

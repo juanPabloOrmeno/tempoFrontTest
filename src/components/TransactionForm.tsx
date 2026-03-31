@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { TransactionRequest } from '../types/api';
-import type { TenpistaResponse } from '../types/api';
-import { transactionRepository } from '../api/transactionRepository';
-import { tenpistaRepository } from '../api/tenpistaRepository';
+import type { TempistaResponse } from '../types/api';
+import { tempistaRepository } from '../api/tempistaRepository';
 import '../styles/TransactionForm.css';
 
 interface TransactionFormProps {
@@ -15,7 +14,7 @@ interface FormErrors {
     merchant?: string;
     amount?: string;
     transactionDate?: string;
-    tenpistaId?: string;
+    tempistaId?: string;
 }
 
 const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel }) => {
@@ -24,29 +23,29 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel })
         merchant: '',
         amount: '',
         transactionDate: '',
-        tenpistaId: '',
+        tempistaId: '',
     });
 
     const [errors, setErrors] = useState<FormErrors>({});
     const [isSaved, setIsSaved] = useState(false);
-    const [tenpistas, setTenpistas] = useState<TenpistaResponse[]>([]);
+    const [tempistas, setTempistas] = useState<TempistaResponse[]>([]);
     const [loading, setLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Cargar tenpistas al montar el componente
+    // Cargar tempistas al montar el componente
     useEffect(() => {
-        const loadTenpistas = async () => {
+        const loadTempistas = async () => {
             try {
                 setLoading(true);
-                const data = await tenpistaRepository.getAllTenpistas();
-                setTenpistas(data);
+                const data = await tempistaRepository.getAllTempistas();
+                setTempistas(data);
             } catch (error) {
-                console.error('Error cargando tenpistas:', error);
+                console.error('Error cargando tempistas:', error);
             } finally {
                 setLoading(false);
             }
         };
-        loadTenpistas();
+        loadTempistas();
     }, []);
 
     const validateForm = (): boolean => {
@@ -83,10 +82,10 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel })
             }
         }
 
-        if (!formData.tenpistaId) {
-            newErrors.tenpistaId = 'Tenpista is required';
-        } else if (isNaN(Number(formData.tenpistaId))) {
-            newErrors.tenpistaId = 'Invalid tenpista';
+        if (!formData.tempistaId) {
+            newErrors.tempistaId = 'Tempista is required';
+        } else if (isNaN(Number(formData.tempistaId))) {
+            newErrors.tempistaId = 'Invalid tempista';
         }
 
         setErrors(newErrors);
@@ -124,7 +123,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel })
                 transactionId: Number(formData.transactionId),
                 merchant: formData.merchant,
                 amount: Number(formData.amount),
-                tenpistaId: Number(formData.tenpistaId),
+                tempistaId: Number(formData.tempistaId),
                 transactionDate: new Date(formData.transactionDate).toISOString(),
             };
 
@@ -138,7 +137,7 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel })
                     merchant: '',
                     amount: '',
                     transactionDate: '',
-                    tenpistaId: '',
+                    tempistaId: '',
                 });
                 setIsSaved(false);
             }, 1500);
@@ -241,28 +240,28 @@ const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, onCancel })
             </div>
 
             <div className="form-group full-width">
-                <label htmlFor="tenpistaId" className="form-label">
-                    Tenpista <span className="required">*</span>
+                <label htmlFor="tempistaId" className="form-label">
+                    Tempista <span className="required">*</span>
                 </label>
                 <select
-                    id="tenpistaId"
-                    name="tenpistaId"
-                    className={`form-select ${errors.tenpistaId ? 'error' : ''}`}
-                    value={formData.tenpistaId}
+                    id="tempistaId"
+                    name="tempistaId"
+                    className={`form-select ${errors.tempistaId ? 'error' : ''}`}
+                    value={formData.tempistaId}
                     onChange={handleInputChange}
                     disabled={loading}
                 >
                     <option value="">
-                        {loading ? 'Loading tenpistas...' : 'Select a Tenpista'}
+                        {loading ? 'Loading tempistas...' : 'Select a Tempista'}
                     </option>
-                    {tenpistas.map((tenpista) => (
-                        <option key={tenpista.id} value={tenpista.id}>
-                            {tenpista.name}
+                    {tempistas.map((tempista) => (
+                        <option key={tempista.id} value={tempista.id}>
+                            {tempista.name}
                         </option>
                     ))}
                 </select>
-                {errors.tenpistaId && (
-                    <p className="form-error">{errors.tenpistaId}</p>
+                {errors.tempistaId && (
+                    <p className="form-error">{errors.tempistaId}</p>
                 )}
             </div>
 

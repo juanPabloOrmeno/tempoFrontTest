@@ -1,12 +1,11 @@
 import { create } from 'zustand';
-import type { Transaction, FilterState } from '../types/transaction';
-import { transactionRepository } from '../api/transactionRepository';
+import type { Transaction } from '../types/transaction';
+import { transactionRepository } from '../api/tramsactionRepository';
 
 interface TransactionState {
   // Estado
   transactions: Transaction[];
   currentPage: number;
-  filters: FilterState;
   totalEntries: number;
   totalPages: number;
   loading: boolean;
@@ -15,31 +14,21 @@ interface TransactionState {
   // Acciones
   setTransactions: (transactions: Transaction[]) => void;
   setCurrentPage: (page: number) => void;
-  setFilters: (filters: FilterState) => void;
-  updateFilters: (filters: Partial<FilterState>) => void;
   setTotalEntries: (total: number) => void;
   setTotalPages: (pages: number) => void;
-  applyFilters: () => void;
-  resetFilters: () => void;
   
   // Acciones asincrónicas
   fetchTransactions: () => Promise<void>;
   addTransaction: (transaction: Transaction) => void;
+  removeTransaction: (transactionId: number) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
 }
 
-const initialFilters: FilterState = {
-  merchantName: '',
-  dateRange: 'Last 30 Days',
-  status: 'All Transactions',
-};
-
-export const useTransactionStore = create<TransactionState>((set, get) => ({
+export const useTransactionStore = create<TransactionState>((set) => ({
   // Estado inicial
   transactions: [],
   currentPage: 1,
-  filters: initialFilters,
   totalEntries: 0,
   totalPages: 0,
   loading: false,
@@ -50,28 +39,9 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
 
   setCurrentPage: (page) => set({ currentPage: page }),
 
-  setFilters: (filters) => set({ filters }),
-
-  updateFilters: (partialFilters) =>
-    set((state) => ({
-      filters: { ...state.filters, ...partialFilters },
-    })),
-
   setTotalEntries: (total) => set({ totalEntries: total }),
 
   setTotalPages: (pages) => set({ totalPages: pages }),
-
-  applyFilters: () => {
-    set({ currentPage: 1 });
-    const state = get();
-    console.log('Filtros aplicados:', state.filters);
-  },
-
-  resetFilters: () =>
-    set({
-      filters: initialFilters,
-      currentPage: 1,
-    }),
 
   setLoading: (loading) => set({ loading }),
 
@@ -101,5 +71,14 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     set((state) => ({
       transactions: [transaction, ...state.transactions],
       totalEntries: state.totalEntries + 1,
+    })),
+
+  // Eliminar transacción de la lista local
+  removeTransaction: (transactionId: number) =>
+    set((state) => ({
+      transactions: state.transactions.filter(
+        (t) => t.transactionId !== transactionId
+      ),
+      totalEntries: Math.max(0, state.totalEntries - 1),
     })),
 }));
