@@ -1,0 +1,280 @@
+/* TempistaForm */
+.tempista-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.tempista-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.tempista-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tempista-form .form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.tempista-form .form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #495057;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tempista-form .required {
+  color: #dc3545;
+}
+
+.tempista-form .input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tempista-form .form-input,
+.tempista-form .form-select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f8f9fa;
+  color: #212529;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.tempista-form .form-input::placeholder,
+.tempista-form .form-select::placeholder {
+  color: #adb5bd;
+}
+
+.tempista-form .form-input:focus,
+.tempista-form .form-select:focus {
+  outline: none;
+  border-color: #0056b3;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+}
+
+.tempista-form .form-input.error,
+.tempista-form .form-select.error {
+  border-color: #dc3545;
+  background: white;
+}
+
+.tempista-form .form-input.error:focus,
+.tempista-form .form-select.error:focus {
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.tempista-form .input-indicator {
+  position: absolute;
+  right: 12px;
+  color: #28a745;
+  font-size: 16px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.tempista-form .form-hint {
+  font-size: 12px;
+  color: #868e96;
+  margin-top: 4px;
+}
+
+.tempista-form .form-error {
+  font-size: 12px;
+  color: #dc3545;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tempista-form .form-error::before {
+  content: '⊗';
+  font-weight: 600;
+}
+
+.tempista-form .form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f8f9fa;
+  color: #212529;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.tempista-form .form-textarea::placeholder {
+  color: #adb5bd;
+}
+
+.tempista-form .form-textarea:focus {
+  outline: none;
+  border-color: #0056b3;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+}
+
+/* Form Footer */
+.tempista-form .form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid #e9ecef;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tempista-form .form-status {
+  flex: 1;
+  min-width: 200px;
+}
+
+.tempista-form .status-message {
+  font-size: 12px;
+  color: #28a745;
+  font-weight: 600;
+  margin: 0;
+}
+
+.tempista-form .form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.tempista-form .btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.tempista-form .btn-cancel {
+  background: white;
+  color: #495057;
+  border: 1px solid #dee2e6;
+}
+
+.tempista-form .btn-cancel:hover {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.tempista-form .btn-primary {
+  background: #0056b3;
+  color: white;
+}
+
+.tempista-form .btn-primary:hover:not(:disabled) {
+  background-color: #004494;
+}
+
+.tempista-form .btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .tempista-form {
+    padding: 32px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tempista-form {
+    padding: 24px 16px;
+    gap: 16px;
+  }
+
+  .tempista-form .form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .tempista-form .form-label {
+    font-size: 12px;
+  }
+
+  .tempista-form .form-input,
+  .tempista-form .form-select,
+  .tempista-form .form-textarea {
+    padding: 10px 12px;
+    font-size: 16px;
+  }
+
+  .tempista-form .form-footer {
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 16px;
+    gap: 12px;
+  }
+
+  .tempista-form .form-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .tempista-form .btn {
+    flex: 1;
+    padding: 12px 16px;
+  }
+
+  .tempista-form .form-status {
+    min-width: unset;
+    text-align: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .tempista-form {
+    padding: 16px 12px;
+    border-radius: 8px;
+  }
+
+  .tempista-form .form-label {
+    font-size: 11px;
+    letter-spacing: 0.3px;
+  }
+
+  .tempista-form .form-input,
+  .tempista-form .form-select,
+  .tempista-form .form-textarea {
+    padding: 8px 10px;
+    font-size: 16px;
+    border-radius: 6px;
+  }
+
+  .tempista-form .form-hint,
+  .tempista-form .form-error {
+    font-size: 11px;
+  }
+
+  .tempista-form .btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}

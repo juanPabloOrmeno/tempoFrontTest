@@ -1,0 +1,310 @@
+/* TransactionRow */
+.transaction-row {
+  height: 70px;
+}
+
+.cell-date {
+  padding: 16px;
+  color: #212529;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.cell-time {
+  color: #868e96;
+  font-size: 12px;
+  font-weight: 400;
+  margin-top: 4px;
+}
+
+.cell-merchant {
+  padding: 16px;
+}
+
+.merchant-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: white;
+  font-size: 14px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  flex-shrink: 0;
+}
+
+.merchant-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.merchant-name {
+  color: #212529;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.merchant-invoice {
+  color: #868e96;
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.cell-category {
+  padding: 16px;
+}
+
+.category-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: inline-block;
+}
+
+.category-materials {
+  background-color: #e7f5ff;
+  color: #0077cc;
+}
+
+.category-software {
+  background-color: #fff3e0;
+  color: #ff8c00;
+}
+
+.category-operations {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.category-fees {
+  background-color: #fbe9ea;
+  color: #c41c3b;
+}
+
+.category-default {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.cell-amount {
+  padding: 16px;
+  color: #212529;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.cell-status {
+  padding: 16px;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-success {
+  background-color: #d1e7dd;
+  color: #146c43;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #664d03;
+}
+
+.status-failed {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+.cell-actions {
+  padding: 16px;
+  text-align: center;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px 8px;
+  transition: color 0.3s ease;
+  line-height: 1;
+}
+
+.action-btn:hover {
+  color: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .transaction-row {
+    height: auto;
+    display: contents;
+  }
+
+  .cell-date,
+  .cell-merchant,
+  .cell-category,
+  .cell-amount,
+  .cell-status,
+  .cell-actions {
+    padding: 0;
+    display: block;
+  }
+
+  .cell-merchant {
+    display: flex !important;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 0 !important;
+  }
+
+  .merchant-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .merchant-avatar {
+    margin-bottom: 0;
+    width: 36px;
+    height: 36px;
+    font-size: 13px;
+    min-width: 36px;
+    flex-shrink: 0;
+    border-radius: 6px;
+  }
+
+  .merchant-name {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #212529;
+  }
+
+  .merchant-invoice {
+    font-size: 11px;
+    color: #868e96;
+    line-height: 1.2;
+  }
+
+  .cell-date {
+    font-size: 12px;
+    color: #495057;
+  }
+
+  .cell-time {
+    font-size: 11px;
+  }
+
+  .cell-category {
+    padding: 0 !important;
+  }
+
+  .category-badge {
+    font-size: 11px;
+    padding: 5px 8px;
+    font-weight: 500;
+  }
+
+  .cell-amount {
+    padding: 0 !important;
+    font-size: 13px;
+    font-weight: 700;
+    color: #212529;
+  }
+
+  .cell-status {
+    padding: 0 !important;
+  }
+
+  .status-badge {
+    font-size: 11px;
+    padding: 5px 8px;
+    font-weight: 500;
+  }
+
+  .cell-actions {
+    padding: 0 !important;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .action-btn {
+    font-size: 18px;
+    padding: 6px 8px;
+    color: #495057;
+  }
+
+  .action-btn:hover {
+    color: #0056b3;
+  }
+}
+
+@media (max-width: 500px) {
+  .merchant-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+    min-width: 32px;
+  }
+
+  .merchant-name {
+    font-size: 13px;
+  }
+
+  .merchant-invoice {
+    font-size: 11px;
+  }
+
+  .merchant-info {
+    gap: 2px;
+  }
+
+  .cell-date {
+    font-size: 12px;
+  }
+
+  .cell-amount {
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .category-badge {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .status-badge {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .status-icon {
+    font-size: 12px;
+  }
+
+  .action-btn {
+    font-size: 16px;
+    padding: 5px 6px;
+  }
+}

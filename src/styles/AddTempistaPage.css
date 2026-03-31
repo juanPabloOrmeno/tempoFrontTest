@@ -1,0 +1,180 @@
+/* AddTempistaPage */
+.add-tempista-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #ffffff;
+}
+
+.add-tempista-page .main-content {
+  margin-left: 220px;
+  flex: 1;
+  padding: 32px 38px;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  min-height: 100vh;
+}
+
+.add-tempista-page .page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.add-tempista-page .breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #495057;
+  margin-bottom: 16px;
+}
+
+.add-tempista-page .breadcrumb-link {
+  color: #0056b3;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.add-tempista-page .breadcrumb-link:hover {
+  text-decoration: underline;
+}
+
+.add-tempista-page .breadcrumb-separator {
+  color: #adb5bd;
+  font-weight: 600;
+}
+
+.add-tempista-page .breadcrumb-active {
+  color: #212529;
+  font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+  .add-tempista-page .main-content {
+    padding: 28px 24px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .add-tempista-page {
+    flex-direction: column-reverse;
+  }
+
+  .add-tempista-page .sidebar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-top: 1px solid #e9ecef;
+    flex-direction: row;
+    padding: 8px 12px;
+    z-index: 100;
+    overflow-x: auto;
+  }
+
+  .add-tempista-page .sidebar-header {
+    display: none;
+  }
+
+  .add-tempista-page .sidebar-nav {
+    flex-direction: row;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .add-tempista-page .nav-label {
+    display: none;
+  }
+
+  .add-tempista-page .nav-item {
+    padding: 8px 10px;
+  }
+
+  .add-tempista-page .new-project-btn {
+    display: none;
+  }
+
+  .add-tempista-page .main-content {
+    margin-left: 0;
+    margin-bottom: 70px;
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .add-tempista-page .main-content {
+    padding: 16px 12px;
+    margin-bottom: 80px;
+  }
+
+  .add-tempista-page .header {
+    padding: 16px 0;
+  }
+
+  .add-tempista-page .header-title {
+    font-size: 24px;
+  }
+
+  .add-tempista-page .header-description {
+    font-size: 14px;
+  }
+
+  .add-tempista-page .breadcrumb {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .add-tempista-page .page-content {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 500px) {
+  .add-tempista-page .main-content {
+    padding: 12px 8px;
+  }
+
+  .add-tempista-page .header {
+    padding: 12px 0;
+  }
+
+  .add-tempista-page .header-title {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .add-tempista-page .header-description {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .add-tempista-page .breadcrumb {
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .add-tempista-page .breadcrumb-separator {
+    margin: 0 2px;
+  }
+
+  .add-tempista-page .page-content {
+    gap: 12px;
+  }
+
+  .add-tempista-page .sidebar {
+    padding: 6px 8px;
+  }
+
+  .add-tempista-page .nav-icon {
+    font-size: 14px;
+  }
+
+  .add-tempista-page .nav-item {
+    padding: 6px 8px;
+  }
+}

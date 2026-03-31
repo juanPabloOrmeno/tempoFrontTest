@@ -1,0 +1,162 @@
+/* FilterPanel */
+.filter-panel {
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  align-items: flex-end;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #495057;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-input {
+  padding: 10px 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f8f9fa;
+  color: #212529;
+  transition: all 0.3s ease;
+}
+
+.filter-input::placeholder {
+  color: #adb5bd;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: #0056b3;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+}
+
+.filter-date-btn {
+  padding: 10px 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: #f8f9fa;
+  color: #212529;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.filter-date-btn:hover {
+  border-color: #0056b3;
+  background: white;
+}
+
+.filter-select {
+  padding: 10px 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: #f8f9fa;
+  color: #212529;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #0056b3;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+}
+
+.apply-filters-btn {
+  padding: 10px 20px;
+  background: #0056b3;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+}
+
+.apply-filters-btn:hover {
+  background-color: #004494;
+}
+
+@media (max-width: 1200px) {
+  .filter-panel {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-panel {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .filter-group {
+    min-width: unset;
+  }
+
+  .filter-label {
+    font-size: 11px;
+  }
+
+  .filter-input,
+  .filter-date-btn,
+  .filter-select {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .apply-filters-btn {
+    width: 100%;
+    padding: 10px 16px;
+  }
+}
+
+@media (max-width: 500px) {
+  .filter-panel {
+    padding: 10px 8px;
+    gap: 10px;
+  }
+
+  .filter-label {
+    font-size: 10px;
+    letter-spacing: 0.3px;
+  }
+
+  .filter-input,
+  .filter-date-btn,
+  .filter-select {
+    padding: 8px 10px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+
+  .apply-filters-btn {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
